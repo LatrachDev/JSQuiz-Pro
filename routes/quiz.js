@@ -9,5 +9,6 @@ router.post("/start", quizSessionController.startSession);
 router.post("/answer", quizController.saveAnswer);
 router.post("/score", quizController.calculateScore);
 router.get("/user/:userId/theme/:themeId/history", quizController.getUserHistory);
+router.get("/user/:userId/theme/:themeId/score", quizSessionController.getUserScore);
 
 module.exports = router;
