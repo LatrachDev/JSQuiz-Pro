@@ -1,5 +1,6 @@
-const { Question, UserAnswer } = require("../models");
+const { Question, UserAnswer, QuizSession } = require("../models");
 const { Sequelize } = require("sequelize");
+const quizService = require("../services/quizService");
 
 // function to get theme questions
 exports.getQuestionsByTheme = async (req, res) => {
@@ -48,5 +49,52 @@ exports.saveAnswer = async (req, res) => {
     } catch (err) {
         console.error("Error saving answer:", err);
         res.status(500).json({ success: false, message: "Failed to save answer" });
+    }
+};
+
+
+// function to calculate and save score
+exports.calculateScore = async (req, res) => {
+    try {
+        const { userId, themeId } = req.body;
+
+        if (!userId || !themeId) {
+            return res.status(400).json({ success: false, message: "userId and themeId are required" });
+        }
+
+        // get user answers at the theme
+        const userAnswers = await UserAnswer.findAll({
+            where: { user_id: userId },
+            include: [{
+                model: Question,
+                where: { theme_id: themeId },
+            }]
+        });
+
+        let score = 0;
+
+        // calculate score
+        for (const ua of userAnswers) {
+            const question = ua.Question;
+            if (quizService.checkAnswers(question, ua.answers)) {
+                score++;
+            }
+        }
+
+        // update session score
+        await QuizSession.update(
+            { score, status: "termine" },
+            { where: { user_id: userId, theme_id: themeId } }
+        );
+
+        res.json({
+            success: true,
+            score,
+            total: userAnswers.length
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false, message: "Failed to calculate score" });
     }
 };
