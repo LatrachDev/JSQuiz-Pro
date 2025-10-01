@@ -4,7 +4,7 @@
   "description": "This project is a **multi-user quiz platform** built with **Node.js, Express, MySQL, and EJS**.  \r It supports user authentication, quiz gameplay, score tracking, and role-based dashboards (User & Admin).  \r It was designed to introduce the fundamentals of **full-stack development** (backend, database, routes, sessions).",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "devStart": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -23,7 +23,9 @@
     "ejs": "^3.1.10",
     "express": "^5.1.0",
     "express-session": "^1.18.2",
-    "mysql2": "^3.15.1"
+    "mysql2": "^3.15.1",
+    "nodemon": "^3.1.10",
+    "sequelize": "^6.37.7"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.21",
