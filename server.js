@@ -3,6 +3,8 @@ const sequelize = require('./config/database');
 require('dotenv').config();
 
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // DB connection
 (async () => {
