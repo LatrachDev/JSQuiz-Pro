@@ -17,7 +17,10 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 const quizRoutes = require("./routes/quiz");
+const statisticsRoutes = require("./routes/statistics");
+
 app.use("/api/quiz", quizRoutes);
+app.use("/api/statistics", statisticsRoutes);
 
 
 app.listen(3000, () => {
