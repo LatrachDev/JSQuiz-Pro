@@ -8,5 +8,6 @@ router.get("/theme/:themeId/questions", quizController.getQuestionsByTheme);
 router.post("/start", quizSessionController.startSession);
 router.post("/answer", quizController.saveAnswer);
 router.post("/score", quizController.calculateScore);
+router.get("/user/:userId/theme/:themeId/history", quizController.getUserHistory);
 
 module.exports = router;

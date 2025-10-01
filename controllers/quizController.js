@@ -52,7 +52,6 @@ exports.saveAnswer = async (req, res) => {
     }
 };
 
-
 // function to calculate and save score
 exports.calculateScore = async (req, res) => {
     try {
@@ -96,5 +95,63 @@ exports.calculateScore = async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).json({ success: false, message: "Failed to calculate score" });
+    }
+};
+
+// function to get user history in a theme
+exports.getUserHistory = async (req, res) => {
+    try {
+        const { userId, themeId } = req.params;
+
+        if (!userId || !themeId) {
+            return res.status(400).json({ success: false, message: "userId and themeId are required" });
+        }
+
+        // Fetch quiz session for this user and theme
+        const session = await QuizSession.findOne({
+            where: { user_id: userId, theme_id: themeId },
+        });
+
+        if (!session) {
+            return res.status(404).json({ success: false, message: "No session found for this user in this theme" });
+        }
+
+        // Fetch all user answers for this theme
+        const userAnswers = await UserAnswer.findAll({
+            where: { user_id: userId },
+            include: [{
+                model: Question,
+                where: { theme_id: themeId }
+            }]
+        });
+
+        // Map answers with correctness
+        const answersWithResult = userAnswers.map(ua => {
+            const question = ua.Question;
+            const correct = quizService.checkAnswers(question, ua.answers);
+            return {
+                questionId: question.id,
+                questionText: question.question_text,
+                userAnswers: ua.answers,
+                correct,
+                correctAnswers: question.options.filter(o => o.correct).map(o => o.text)
+            };
+        });
+
+        res.json({
+            success: true,
+            session: {
+                id: session.id,
+                score: session.score,
+                status: session.status,
+                started_at: session.started_at,
+                ended_at: session.ended_at
+            },
+            answers: answersWithResult
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false, message: "Failed to fetch user history" });
     }
 };
