@@ -4,11 +4,10 @@ require('dotenv').config();
 
 const app = express();
 
-// Test DB connection
+// DB connection
 (async () => {
     try {
         await sequelize.authenticate();
-        console.log('MySQL connection has been established successfully.');
     } catch (error) {
         console.error('Unable to connect to the database:', error);
     }
