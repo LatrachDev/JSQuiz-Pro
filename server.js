@@ -1,7 +1,6 @@
 const express = require('express');
 const sequelize = require('./config/database');
 const Theme = require("./models/Theme");
-// import Theme from ("./models/Theme");
 require('dotenv').config();
 
 const app = express();
@@ -20,16 +19,15 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 const quizRoutes = require("./routes/quiz");
 const statisticsRoutes = require("./routes/statistics");
+const questionsRoutes = require("./routes/questions");
 
 app.use("/api/quiz", quizRoutes);
 app.use("/api/statistics", statisticsRoutes);
+app.use("/api/questions", questionsRoutes);
 
-
-app.listen(3000, () => {
-    console.log(`Server running on http://localhost:${process.env.PORT || 3000}`);
-app.get('/', (req, res) => {
-    res.send('Express + Sequelize + MySQL is running!');
-});
+// app.get('/', (req, res) => {
+//     res.send('Express + Sequelize + MySQL is running!');
+// });
 
 //
 const themes = ['javaScript','nodejs','nestjs','reactjs','nextjs'];

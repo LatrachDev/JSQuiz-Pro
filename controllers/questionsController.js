@@ -1,7 +1,7 @@
-import Question from "../models/Question";
+const Question = require("../models/Question");
 
 //create question function
-export async function create(req, res) {
+exports.create= async(req, res) => {
   try {
     const { theme_id, question_text, options, multiple } = req.body;
 
@@ -32,7 +32,7 @@ export async function create(req, res) {
 }
 
 //find question by id
-async function findOne(req, res) {
+exports.findOne = async(req, res) => {
   try {
     const id = req.params.id;
     const question = await Question.findByPk(id);
@@ -49,7 +49,7 @@ async function findOne(req, res) {
 }
 
 //update a question
-async function update(req, res) {
+exports.update = async(req, res) => {
   try {
     const id = req.params.id;
 
@@ -72,7 +72,7 @@ async function update(req, res) {
 }
 
 //delete question
-async function deleteOne(req, res){
+exports.deleteOne = async(req, res) => {
     try {
         const id = req.params.id;
 
