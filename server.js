@@ -1,7 +1,8 @@
-const express = require('express');
-const sequelize = require('./config/database');
+const express = require("express");
+const sequelize = require("./config/database");
 const Theme = require("./models/Theme");
-require('dotenv').config();
+require("dotenv").config();
+const path = require("path");
 
 const app = express();
 app.use(express.json());
@@ -9,11 +10,11 @@ app.use(express.urlencoded({ extended: true }));
 
 // DB connection
 (async () => {
-    try {
-        await sequelize.authenticate();
-    } catch (error) {
-        console.error('Unable to connect to the database:', error);
-    }
+  try {
+    await sequelize.authenticate();
+  } catch (error) {
+    console.error("Unable to connect to the database:", error);
+  }
 })();
 
 // Routes
@@ -30,7 +31,7 @@ app.use("/api/questions", questionsRoutes);
 // });
 
 //
-const themes = ['javaScript','nodejs','nestjs','reactjs','nextjs'];
+const themes = ["javaScript", "nodejs", "nestjs", "reactjs", "nextjs"];
 
 (async () => {
   for (const name of themes) {
@@ -38,6 +39,10 @@ const themes = ['javaScript','nodejs','nestjs','reactjs','nextjs'];
   }
 })();
 
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
+
 app.listen(process.env.PORT || 3000, () => {
-    console.log(`Server running on port ${process.env.PORT || 3000}`);
+  console.log(`Server running on port ${process.env.PORT || 3000}`);
 });

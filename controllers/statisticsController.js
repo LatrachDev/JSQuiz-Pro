@@ -31,7 +31,7 @@ exports.getTopUsersInTheme = async (req, res) => {
 //average score in a theme
 exports.avgScoreIntheme = async (req, res) => {
   try {
-    const moyennes = await Score.findAll({
+    const moyennes = await QuizSession.findAll({
       attributes: [
         "theme_id",
         [Sequelize.fn("AVG", Sequelize.col("score")), "moyenne_scores"],
