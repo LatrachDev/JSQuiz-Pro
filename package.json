@@ -4,7 +4,9 @@
   "description": "This project is a **multi-user quiz platform** built with **Node.js, Express, MySQL, and EJS**.  \r It supports user authentication, quiz gameplay, score tracking, and role-based dashboards (User & Admin).  \r It was designed to introduce the fundamentals of **full-stack development** (backend, database, routes, sessions).",
   "main": "index.js",
   "scripts": {
-    "devStart": "nodemon server.js"
+    "devStart": "nodemon server.js",
+    "build:css": "npx tailwindcss -i ./public/css/tailwind.css -o ./public/css/style.css --watch",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -29,7 +31,8 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.6"
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.18"
   },
   "type": "commonjs"
 }

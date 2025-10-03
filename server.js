@@ -17,6 +17,19 @@ app.use(express.urlencoded({ extended: true }));
   }
 })();
 
+// view engine
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// static files
+// app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static("public"));
+
+
+// view routes
+const viewRoutes = require('./routes/view');
+app.use('/', viewRoutes);
+
 // Routes
 const quizRoutes = require("./routes/quiz");
 const statisticsRoutes = require("./routes/statistics");
