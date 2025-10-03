@@ -1,4 +1,4 @@
-const { Theme } = require("../models");
+const { Theme, Question } = require("../models");
 
 exports.home = (req, res) => {
   res.render("home", {
@@ -17,6 +17,39 @@ exports.themes = async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching themes:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+exports.manage_questions = (req, res)=>{
+  res.render("manage_questions", {
+     title: "Questions",
+  })
+};
+
+// exports.questions = async (req, res)=>{
+//   try {
+//     const questions  = await Question.findAll();
+//     res.render("manage_questions", {
+//       title: "Question",
+//       questions
+//     })
+//   } catch (error) {
+//     console.error("Error fetching questions:", error);
+//     res.status(500).send("Internal Server Error");
+//   }
+// };
+
+exports.questions = async (req, res) => {
+  try {
+    const questions = await Question.findAll();
+    console.log("questions : ",questions)
+    res.render("manage_questions", { 
+      title: "Questions",
+      questions : questions
+    });
+  } catch (error) {
+    console.error("Error fetching questions:", error);
     res.status(500).send("Internal Server Error");
   }
 };

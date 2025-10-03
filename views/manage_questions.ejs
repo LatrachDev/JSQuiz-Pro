@@ -1,0 +1,73 @@
+<div class="p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
+<!-- Sidebar Questions -->
+    <aside class="bg-white shadow rounded-xl p-4 order-2 lg:order-1">
+      <h2 class="text-lg sm:text-xl font-semibold mb-4">Questions</h2>
+      
+      <!-- question -->
+      <% if (questions && questions.length > 0) { %>
+      <% questions.forEach(q=> { %>
+      <div class="border rounded-lg p-3 mb-3">
+        <p class="text-sm mb-2"><%= q.question_text %></p>
+        <span class="px-2 py-1 bg-gray-200 rounded text-xs"><%= q.multiple ? "📑 Multiple choice" : "✔ Single Choice" %></span>
+      </div>
+      <% }); %>
+      <% } else { %>
+      <p class="text-gray-500">Aucune question trouvée.</p>
+      <% } %>
+    </aside>
+
+    <!-- Question Form -->
+    <section class="bg-white shadow rounded-xl p-4 sm:p-6 order-1 lg:order-2 lg:col-span-3">
+      
+      <!-- Add question button -->
+      <div class="flex justify-between sm:justify-end mb-4">
+        <button class="bg-black text-white px-3 sm:px-4 py-2 rounded-lg flex items-center gap-2 text-sm sm:text-base">
+          ➕ Add Question
+        </button>
+      </div>
+      
+      <!-- Select Type -->
+      <div class="flex justify-end mb-4">
+        <select class="border rounded-lg px-3 py-2 text-sm">
+          <option value="true">📑 Multiple choice</option>
+          <option value="false">✔ Single choice</option>
+        </select>
+      </div>
+
+      <!-- Question Input -->
+      <input type="text" placeholder="Enter Your Question ...."
+        class="w-full border rounded-lg px-4 py-2 mb-4 text-sm sm:text-base" />
+
+      <!-- Options -->
+      <div class="space-y-3">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
+          <input type="text" value="Lorem Ipsum is simply dummy text of the"
+            class="flex-1 border rounded-lg px-3 py-2 w-full sm:w-auto text-sm sm:text-base" />
+          <label class="flex items-center gap-1 text-sm">
+            <input type="checkbox" class="accent-yellow-500">
+            Correct
+          </label>
+          <button class="text-red-500 text-lg">🗑</button>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
+          <input type="text" value="Lorem Ipsum is simply dummy text of the"
+            class="flex-1 border rounded-lg px-3 py-2 w-full sm:w-auto text-sm sm:text-base" />
+          <label class="flex items-center gap-1 text-sm">
+            <input type="checkbox" class="accent-yellow-500">
+            Correct
+          </label>
+          <button class="text-red-500 text-lg">🗑</button>
+        </div>
+      </div>
+
+      <!-- Add option -->
+      <div class="text-yellow-500 text-sm font-medium mt-3 cursor-pointer">+ Add Option</div>
+
+      <!-- Save -->
+      <div class="flex justify-end mt-6">
+        <button class="bg-black text-white px-6 py-2 rounded-lg text-sm sm:text-base">Save</button>
+      </div>
+
+    </section>
+</div>

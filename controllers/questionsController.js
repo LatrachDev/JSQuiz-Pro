@@ -5,6 +5,7 @@ exports.create= async(req, res) => {
   try {
     const { theme_id, question_text, options, multiple } = req.body;
 
+    const isMultiple = multiple === "true";
     if (!question_text || !theme_id || !options || !multiple) {
       return res
         .status(400)
@@ -18,7 +19,7 @@ exports.create= async(req, res) => {
       theme_id,
       question_text,
       options,
-      multiple,
+      multiple: isMultiple,
     });
     return res.status(201).json({
       message: "question created with succés",
