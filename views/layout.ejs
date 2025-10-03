@@ -13,19 +13,26 @@
 
     <!-- Tailwind CSS -->
     <link href="/css/style.css" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
 </head>
 
 <body class="bg-gray-200 min-h-screen font-sans">
 
     <%- include('partials/header') %>
 
-        <main class="container mx-auto px-6 py-6">
-            <!-- Here goes each page content -->
-            <%- body %>
-        </main>
+    <main class="bg-gray-100 min-h-screen flex items-center justify-center p-8">
+        <!-- Here goes each page content -->
+        <%- body %>
+    </main>
 
-        <%- include('partials/footer') %>
-
+    <%- include('partials/footer') %>
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        lucide.createIcons(); // activate all icons
+    </script>
 </body>
 
 </html>
