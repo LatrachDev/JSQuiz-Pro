@@ -9,11 +9,16 @@ router.post("/login", authController.login);
 router.post("/logout", authController.logout);
 
 router.get('/register', (req, res) => {
-  res.render('register');
+  res.render('register', {
+    title: "Register",
+  });
 });
 
 router.get('/login', (req, res) => {
-    res.render('login');
+  res.render('login', {
+    title: "Login",
+  });
 });
+
 
 module.exports = router;

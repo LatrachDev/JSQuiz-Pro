@@ -1,1 +1,103 @@
-<!-- quiz -->
+<div class="w-full md:w-1/2 mx-auto px-4">
+    <!-- Header -->
+    <h1 class="text-2xl md:text-3xl font-bold text-center mb-8 md:mb-12">
+        JavaScript <span class="text-yellow-500">Basics</span>
+    </h1>
+
+    <!-- Quiz Card -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <!-- Progress Bar -->
+        <div class="h-2 bg-gray-200">
+            <div id="progress-bar" class="h-full bg-yellow-500" style="width: 0%"></div>
+        </div>
+
+        <div class="p-6 md:p-8">
+            <!-- Question Header -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-2 sm:gap-0">
+                <h2 id="question-number" class="text-lg md:text-xl font-semibold">Question : 0/0</h2>
+                <div class="flex items-center gap-2 text-gray-700">
+                    <span id="timer" class="font-semibold">15s</span>
+                    <i class="text-yellow-500 h-5 w-5" data-lucide="timer"></i>
+                </div>
+            </div>
+
+            <!-- Question -->
+            <p id="question-text" class="text-base md:text-lg mb-6 md:mb-8"></p>
+
+            <!-- Answer Options -->
+            <div id="options-container" class="space-y-3 md:space-y-4 mb-6 md:mb-8"></div>
+
+            <!-- Footer -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition">
+                    Give up
+                </button>
+                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
+                    <p class="text-sm text-gray-600">
+                        <span class="text-yellow-500 font-semibold">Note :</span> A question may have one correct answer
+                        or more
+                    </p>
+                    <button id="next-btn"
+                        class="px-6 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition flex items-center gap-2">
+                        N E X T
+                        <i class="w-5 h-5" data-lucide="chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const themeId = "<%- theme.id %>";
+
+    let questions = [];
+    let currentIndex = 0;
+
+    function renderQuestion(index) {
+        if (index >= questions.length) {
+            document.getElementById("question-text").textContent = "🎉 Quiz Finished!";
+            document.getElementById("options-container").innerHTML = "";
+            document.getElementById("next-btn").disabled = true;
+            return;
+        }
+
+        const q = questions[index];
+
+        // Update header
+        document.getElementById("question-number").textContent = `Question: ${index + 1}/${questions.length}`;
+
+        // Update progress bar
+        document.getElementById("progress-bar").style.width = `${((index + 1) / questions.length) * 100}%`;
+
+        // Show question
+        document.getElementById("question-text").textContent = q.question_text;
+
+        // Show options
+        const optionsContainer = document.getElementById("options-container");
+        optionsContainer.innerHTML = "";
+        q.options.forEach(opt => {
+            const btn = document.createElement("button");
+            btn.className = "w-full text-left p-3 md:p-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition";
+            btn.textContent = opt;
+            btn.onclick = () => console.log("Selected:", opt);
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+
+    fetch(`/api/quiz/theme/${themeId}/questions`)
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+            
+            questions = data;
+            renderQuestion(currentIndex);      // Here you can dynamically render question & options
+        })
+        .catch(err => console.error(err));
+    // Next button
+    document.getElementById("next-btn").addEventListener("click", () => {
+        currentIndex++;
+        renderQuestion(currentIndex);
+    });
+</script>
