@@ -42,7 +42,6 @@ const themes = ["javaScript", "nodejs", "nestjs", "reactjs", "nextjs"];
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-
 app.listen(process.env.PORT || 3000, () => {
   console.log(`Server running on port ${process.env.PORT || 3000}`);
 });
