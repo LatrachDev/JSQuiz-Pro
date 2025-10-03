@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Basics Quiz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <h1 class="text-3xl font-bold text-center mb-12">
+            JavaScript <span class="text-yellow-500">Basics</span>
+        </h1>
+
+        <!-- Quiz Card -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <!-- Progress Bar -->
+            <div class="h-2 bg-gray-200">
+                <div class="h-full bg-yellow-500" style="width: 30%"></div>
+            </div>
+
+            <div class="p-8">
+                <!-- Question Header -->
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-semibold">Question : 3/10</h2>
+                    <div class="flex items-center gap-2 text-gray-700">
+                        <span class="font-semibold">15s</span>
+                        <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Question -->
+                <p class="text-lg mb-8">Which keywords is used to declare a variable in JavaScript ?</p>
+
+                <!-- Answer Options -->
+                <div class="space-y-4 mb-8">
+                    <button class="w-full text-left p-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition">
+                        var
+                    </button>
+                    <button class="w-full text-left p-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition">
+                        let
+                    </button>
+                    <button class="w-full text-left p-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition">
+                        const
+                    </button>
+                    <button class="w-full text-left p-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition">
+                        All of the above
+                    </button>
+                </div>
+
+                <!-- Footer -->
+                <div class="flex justify-between items-center">
+                    <button class="px-6 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition">
+                        Give up
+                    </button>
+                    <div class="flex items-center gap-4">
+                        <p class="text-sm text-gray-600">
+                            <span class="text-yellow-500 font-semibold">Note :</span> A Question may have one correct answer or more
+                        </p>
+                        <button class="px-6 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition flex items-center gap-2">
+                            N E X T
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add click handlers for answer selection
+        const answerButtons = document.querySelectorAll('button[class*="bg-gray-100"]');
+        answerButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Toggle selection
+                this.classList.toggle('bg-blue-100');
+                this.classList.toggle('border-2');
+                this.classList.toggle('border-blue-500');
+            });
+        });
+    </script>
+</body>
+</html>

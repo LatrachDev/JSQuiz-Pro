@@ -5,6 +5,12 @@ module.exports = {
     "./public/**/*.html",
     "./public/**/*.js"
   ],
-  theme: { extend: {} },
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Montserrat', 'ui-sans-serif', 'system-ui']
+      }
+    }
+  },
   plugins: [],
 }
