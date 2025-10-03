@@ -1,8 +1,10 @@
 const express = require("express");
+const path = require("path");
+const expressLayouts = require("express-ejs-layouts");
+
 const sequelize = require("./config/database");
 const Theme = require("./models/Theme");
 require("dotenv").config();
-const path = require("path");
 
 const app = express();
 app.use(express.json());
@@ -24,7 +26,9 @@ app.set('views', path.join(__dirname, 'views'));
 // static files
 // app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static("public"));
-
+// Default layout file
+app.use(expressLayouts);
+app.set("layout", "layout");
 
 // view routes
 const viewRoutes = require('./routes/view');
