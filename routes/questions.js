@@ -3,9 +3,9 @@ const express = require('express');
 
 const router = express.Router();
 
-router.post("/", questions.create);
-router.put("/:id", questions.update);
-router.delete("/:id", questions.deleteOne);
+router.post("/create", questions.create);
+router.put("/:id/update", questions.update);
+router.post("/:id/delete", questions.deleteOne);
 router.get("/:id", questions.findOne);
 
 

@@ -1,39 +1,45 @@
 const Question = require("../models/Question");
 
 //create question function
-exports.create= async(req, res) => {
+exports.create = async (req, res) => {
   try {
-    const { theme_id, question_text, options, multiple } = req.body;
+    const { theme_id, question_text, options, correct, multiple } = req.body;
 
-    const isMultiple = multiple === "true";
-    if (!question_text || !theme_id || !options || !multiple) {
-      return res
-        .status(400)
-        .send({
-          message:
-            "the fields: theme_id, question_text, options and multiple can not be empty",
-        });
+    if (!theme_id || !question_text || !options || multiple === undefined) {
+      return res.status(400).send("Champs requis manquants.");
     }
 
-    const questionData = await Question.create({
+    const opts = Array.isArray(options) ? options : [options];
+    const correctIndexes = Array.isArray(correct)
+      ? correct.map(Number)
+      : correct !== undefined
+      ? [Number(correct)]
+      : [];
+
+    const formattedOptions = opts.map((opt, idx) => ({
+      text: opt,
+      correct: correctIndexes.includes(idx),
+    }));
+
+    const isMultiple = multiple === "true" || multiple === true;
+
+    await Question.create({
       theme_id,
-      question_text,
-      options,
+      question_text: question_text,
+      options: JSON.stringify(formattedOptions),
       multiple: isMultiple,
     });
-    return res.status(201).json({
-      message: "question created with succés",
-      data: questionData,
-    });
+
+
+    return res.redirect("/manage_questions");
   } catch (error) {
-    return res.status(500).json({
-      message: "An error occurred while creating the question.",
-    });
+    console.error(error);
+    res.status(500).send("Erreur lors de la création de la question.");
   }
 }
 
 //find question by id
-exports.findOne = async(req, res) => {
+exports.findOne = async (req, res) => {
   try {
     const id = req.params.id;
     const question = await Question.findByPk(id);
@@ -47,10 +53,10 @@ exports.findOne = async(req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Error while retrieving the question" });
   }
-}
+};
 
 //update a question
-exports.update = async(req, res) => {
+exports.update = async (req, res) => {
   try {
     const id = req.params.id;
 
@@ -68,23 +74,30 @@ exports.update = async(req, res) => {
       data: updatedQuestion,
     });
   } catch (error) {
-    res.status(500).json({ message: "Erreur lors de la mise à jour de la question." });
+    res
+      .status(500)
+      .json({ message: "Erreur lors de la mise à jour de la question." });
   }
-}
+};
 
 //delete question
-exports.deleteOne = async(req, res) => {
-    try {
-        const id = req.params.id;
+exports.deleteOne = async (req, res) => {
+  try {
+    const id = req.params.id;
 
-        const deleted = await Question.destroy({where: {id}});
+    const deleted = await Question.destroy({ where: { id } });
 
-        if(!deleted){
-            return res.status(404).json({message : `Question avec id=${id} non trouvée` })
-        }
-
-        res.json({message : "question supprimé avec succès"});
-    } catch (error) {
-        res.status(500).json({message:"Erreur lors de la suppression de la question." });
+    if (!deleted) {
+      return res
+        .status(404)
+        .json({ message: `Question with id=${id} not found.` });
     }
-}
+
+    // res.json({ message: "question supprimé avec succès" });
+    return res.redirect("/manage_questions");
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Erreur lors de la suppression de la question." });
+  }
+};

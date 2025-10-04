@@ -7,7 +7,7 @@ exports.home = (req, res) => {
   });
 };
 
-// themes pages
+// themes
 exports.themes = async (req, res) => {
   try {
     const themes = await Theme.findAll();
@@ -21,32 +21,28 @@ exports.themes = async (req, res) => {
   }
 };
 
-exports.manage_questions = (req, res)=>{
-  res.render("manage_questions", {
-     title: "Questions",
-  })
+exports.manage_questions = async (req, res)=>{
+  try {
+    const themes = await Theme.findAll(); // récupère tous les thèmes
+    res.render("manage_questions", {
+      title: "Questions",
+      themes, // <-- tu envoies les thèmes à la vue
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Erreur serveur lors du chargement des thèmes");
+  }
 };
-
-// exports.questions = async (req, res)=>{
-//   try {
-//     const questions  = await Question.findAll();
-//     res.render("manage_questions", {
-//       title: "Question",
-//       questions
-//     })
-//   } catch (error) {
-//     console.error("Error fetching questions:", error);
-//     res.status(500).send("Internal Server Error");
-//   }
-// };
 
 exports.questions = async (req, res) => {
   try {
+    const themes = await Theme.findAll();
     const questions = await Question.findAll();
     console.log("questions : ",questions)
     res.render("manage_questions", { 
       title: "Questions",
-      questions : questions
+      questions,
+      themes
     });
   } catch (error) {
     console.error("Error fetching questions:", error);
