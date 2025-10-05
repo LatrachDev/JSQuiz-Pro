@@ -6,5 +6,6 @@ const { isAuthenticated, isAdmin } = require('../middlewares/auth');
 router.get('/', viewController.home);
 router.get('/themes',isAuthenticated, viewController.themes);
 router.get('/quiz/:themeId', isAuthenticated, viewController.quiz);
+router.get('/result/:themeId', isAuthenticated, viewController.result);
 
 module.exports = router;

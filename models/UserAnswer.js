@@ -8,15 +8,10 @@ const UserAnswer = sequelize.define('UserAnswer', {
   user_id: { type: DataTypes.INTEGER, allowNull: false }
 }, {
   tableName: 'user_answers',
-  timestamps: false
-},
-  {
-    indexes: [
-      {
-        unique: true,
-        fields: ['user_id', 'question_id', 'theme_id']
-      }
-    ]
-  });
+  timestamps: false,
+  indexes: [
+    { unique: true, fields: ['user_id', 'question_id'] }
+  ]
+});
 
 module.exports = UserAnswer;

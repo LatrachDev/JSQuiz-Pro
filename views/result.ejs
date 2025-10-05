@@ -1,0 +1,71 @@
+<div class="max-w-4xl w-full">
+    <!-- Header -->
+    <div class="text-center mb-8">
+        <h1 class="text-2xl text-gray-700">
+            Quiz <span class="text-yellow-500">Result</span>
+            <span class="font-bold mx-4">/</span>
+            <span class="text-yellow-500"><%- theme.name %></span>
+        </h1>
+    </div>
+
+    <!-- Success Message -->
+    <div class="text-center mb-12">
+        <p class="text-2xl text-gray-800">
+            Good job,
+            <span class="text-yellow-500 font-semibold">
+                <%= user.username %>
+            </span>
+            ! You have a solid grasp of the concepts.
+        </p>
+    </div>
+
+    <!-- Cards Container -->
+    <div class="grid md:grid-cols-2 gap-6 mb-8">
+        <!-- Score Card -->
+        <div class="bg-yellow-500 rounded-2xl shadow-lg p-12 flex items-center justify-center">
+            <h2 class="text-7xl font-bold text-white">
+                <%= score %>/<%= totalQuestions %>
+            </h2>
+        </div>
+
+        <!-- Time Card -->
+        <div class="bg-white rounded-2xl shadow-lg p-12 flex flex-col items-center justify-center">
+            <i class="text-yellow-500 w-20 h-20 mb-4" data-lucide="timer"></i>
+            <p class="text-gray-700 text-lg">
+                Spended time : <span class="text-yellow-500 font-semibold">01min23s</span>
+            </p>
+        </div>
+    </div>
+
+
+
+    <!-- Quiz Feedback Section -->
+    <div class="mt-12 hidden" id="feedback-section">
+        <h2 class="text-3xl font-bold text-gray-800 mb-6">Quiz Feedback</h2>
+
+        <!-- feedback container  -->
+        <div class="space-y-6" id="feedback-container">
+            <!-- questions feedback will appear here -->
+        </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex flex-col items-center gap-4 mt-4">
+        <a href="/quiz/<%= theme.id %>"
+            class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-12 py-3 rounded-lg uppercase tracking-wider transition-colors">
+            Play Again
+        </a>
+        <button id="view-feedback-btn"
+            class="bg-white hover:bg-gray-50 text-gray-800 font-semibold px-12 py-3 rounded-lg border border-gray-300 transition-colors">
+            View Feedback
+        </button>
+    </div>
+</div>
+
+<script type="module">
+    import { initFeedbackButton } from "/js/feedbackHandler.js";
+    const themeId = "<%= theme.id%>";
+    const userId = "<%= user.id%>";
+
+    initFeedbackButton(userId, themeId)
+</script>
