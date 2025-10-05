@@ -1,1 +1,69 @@
-<!-- admin dashboard -->
+   <!-- Dashboard Page -->
+    <div id="dashboard" class="page active flex flex-col">
+         
+        <div class="flex gap-2 justify-end mb-10">
+            <a href="#" class="bg-black text-white px-3 sm:px-4 py-2 rounded-lg flex items-center gap-2 text-sm sm:text-base hover:bg-gray-500">Dashboard</a>
+            <a href="/manage_questions" class="bg-black text-white px-3 sm:px-4 py-2 rounded-lg flex items-center gap-2 text-sm sm:text-base hover:bg-gray-500">Questions</a>
+        </div>
+     
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-4 gap-4 mb-8">
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="text-gray-500 text-sm mb-2">Total Users</div>
+                <div class="text-4xl font-bold text-gray-800"><%= stats.totalUsers %></div>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="text-gray-500 text-sm mb-2">Total Questions</div>
+                <div class="text-4xl font-bold text-gray-800"><%= stats.totalQuestions %></div>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="text-gray-500 text-sm mb-2">Total Thèmes</div>
+                <div class="text-4xl font-bold text-gray-800"><%= stats.totalThemes %></div>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="text-gray-500 text-sm mb-2">Score Moyen</div>
+                <div class="text-4xl font-bold text-yellow-500"><%= stats.averageScore %></div>
+            </div>
+        </div>
+
+        <!-- Users List -->
+        <div class="bg-white rounded-lg shadow">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold">Users List</h2>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50 border-b border-gray-200">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Theme Selected</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <% userswithScores.forEach(user =>{ %>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center text-white font-semibold"><%= user.username[0] %></div>
+                                    <div class="ml-4">
+                                        <div class="text-sm font-medium text-gray-900"><%= user.username %></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-blue-100 text-blue-800"><%= user.theme.name %></span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-lg font-semibold text-green-600"><%= user.score %></span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= user.username %></td>
+                        </tr>
+                        <% }); %>
+                       
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,124 @@
+<div class="flex flex-col">
+  <div class="flex gap-2 justify-end mb-3 mr-6">
+      <a href="/dashboard_admin" class="bg-black text-white px-3 sm:px-4 py-2 rounded-lg flex items-center gap-2 text-sm sm:text-base hover:bg-gray-500">Dashboard</a>
+      <a href="/manage_questions" class="bg-black text-white px-3 sm:px-4 py-2 rounded-lg flex items-center gap-2 text-sm sm:text-base hover:bg-gray-500">Questions</a>
+  </div>
+  <div class="p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
+  <!-- Sidebar Questions -->
+    <aside class="bg-white shadow rounded-xl p-4 order-2 lg:order-1">
+      <h2 class="text-lg sm:text-xl font-semibold mb-4">Questions</h2>
+      
+      <!-- question -->
+      <% if (questions && questions.length > 0) { %>
+      <% questions.forEach(q=> { %>
+      <div class="border rounded-lg p-3 mb-3">
+        <p class="text-sm mb-2"><%= q.question_text %></p>
+        <div class="flex justify-between">
+          <span class="px-2 py-1 bg-gray-200 rounded text-xs"><%= q.multiple ? "📑 Multiple choice" : "✔ Single Choice" %></span>
+          <form action="/api/questions/<%= q.id %>/delete" method="POST">
+            <button type="submit" class="text-sm hover">🗑</button>
+          </form>
+        </div>
+      </div>
+      <% }); %>
+      <% } else { %>
+      <p class="text-gray-500">No questions found.</p>
+      <% } %>
+    </aside>
+
+    <!-- Question Form -->
+    <form action="/api/questions/create" method="POST" class="bg-white shadow rounded-xl p-4 sm:p-6 order-1 lg:order-2 lg:col-span-3">
+
+    <div class="mb-4">
+      <label class="block text-sm font-medium mb-1">Select Theme</label>
+      <select name="theme_id" class="border rounded-lg px-3 py-2 w-full" required>
+        <option value="">Choose a theme</option>
+        <% themes.forEach(theme => { %>
+          <option value="<%= theme.id %>"><%= theme.name %></option>
+        <% }) %>
+      </select>
+    </div>
+      <!-- Add question button -->
+      <div class="flex justify-between sm:justify-end mb-4">
+        <button class="bg-black text-white px-3 sm:px-4 py-2 rounded-lg flex items-center gap-2 text-sm sm:text-base">
+          ➕ Add Question
+        </button>
+      </div>
+      
+      <!-- Select Type -->
+      <div class="flex justify-end mb-4">
+        <select name="multiple" class="border rounded-lg px-3 py-2 text-sm">
+          <option value="true">📑 Multiple choice</option>
+          <option value="false">✔ Single choice</option>
+        </select>
+      </div>
+
+      <!-- Question Input -->
+      <input type="text"  name="question_text" placeholder="Enter Your Question ...."
+        class="w-full border rounded-lg px-4 py-2 mb-4 text-sm sm:text-base" required />
+
+      <!-- Options -->
+      <div id="optionsContainer" class="space-y-3">
+        <div class="optClass option flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
+          <input type="text" name="options[]" placeholder="Option" value=""
+            class="flex-1 border rounded-lg px-3 py-2 w-full sm:w-auto text-sm sm:text-base" />
+          <label class="flex items-center gap-1 text-sm">
+            <input type="checkbox" name="correct[]" value="0" class="accent-yellow-500">
+            Correct
+          </label>
+          <button class="removeOption text-red-500 text-lg">🗑</button>
+        </div>
+
+        <div class="optClass flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
+          <input type="text" name="options[]" value="" placeholder="Option"
+            class="flex-1 border rounded-lg px-3 py-2 w-full sm:w-auto text-sm sm:text-base" />
+          <label class="flex items-center gap-1 text-sm">
+            <input type="checkbox" name="correct[]" value="1" class="accent-yellow-500">
+            Correct
+          </label>
+          <button type="button" class="removeOption text-red-500 text-lg">🗑</button>
+        </div>
+      </div>
+
+      <!-- Add option -->
+      <div id="addOptionBtn" class="text-yellow-500 text-sm font-medium mt-3 cursor-pointer">+ Add Option</div>
+
+      <!-- Save -->
+      <div class="flex justify-end mt-6">
+        <button type="submit" class="bg-black text-white px-6 py-2 rounded-lg text-sm sm:text-base">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  //ajouter une option
+  const optionsContainer = document.getElementById("optionsContainer");
+  const addOptionBtn = document.getElementById("addOptionBtn");
+
+  addOptionBtn.addEventListener('click', ()=>{
+    const optionIndex = optionsContainer.children.length;
+    console.log("index",optionIndex);
+    const optionDiv = document.createElement("div");
+    optionDiv.className = "optClass flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3";
+    optionDiv.innerHTML = `
+    <input type="text" name="options[]" placeholder="Option"
+      class="flex-1 border rounded-lg px-3 py-2" required />
+    <label class="flex items-center gap-1 text-sm">
+      <input type="checkbox" name="correct[]" value="${optionIndex - 1}" class="accent-yellow-500">
+      Correct
+    </label>
+    <button type="button" class="removeOption text-red-500 text-lg">🗑</button>
+  `;
+  optionsContainer.appendChild(optionDiv);
+  });
+
+  // Supprimer une option
+  optionsContainer.addEventListener("click", (e) => {
+    if (e.target.classList.contains("removeOption")) {
+      e.target.parentElement.remove();
+    }
+  });
+
+  
+</script>
