@@ -1,5 +1,10 @@
-<div class="p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
-<!-- Sidebar Questions -->
+<div class="flex flex-col">
+  <div class="flex gap-2 justify-end mb-3 mr-6">
+      <a href="/dashboard_admin" class="bg-black text-white px-3 sm:px-4 py-2 rounded-lg flex items-center gap-2 text-sm sm:text-base hover:bg-gray-500">Dashboard</a>
+      <a href="/manage_questions" class="bg-black text-white px-3 sm:px-4 py-2 rounded-lg flex items-center gap-2 text-sm sm:text-base hover:bg-gray-500">Questions</a>
+  </div>
+  <div class="p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
+  <!-- Sidebar Questions -->
     <aside class="bg-white shadow rounded-xl p-4 order-2 lg:order-1">
       <h2 class="text-lg sm:text-xl font-semibold mb-4">Questions</h2>
       
@@ -17,7 +22,7 @@
       </div>
       <% }); %>
       <% } else { %>
-      <p class="text-gray-500">Aucune question trouvée.</p>
+      <p class="text-gray-500">No questions found.</p>
       <% } %>
     </aside>
 
@@ -83,7 +88,7 @@
         <button type="submit" class="bg-black text-white px-6 py-2 rounded-lg text-sm sm:text-base">Save</button>
       </div>
     </form>
-
+  </div>
 </div>
 
 <script>

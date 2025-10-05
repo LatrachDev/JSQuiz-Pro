@@ -1,4 +1,5 @@
 const { Theme, Question } = require("../models");
+const { getDashdoardStats, getUsersWithScoreInTheme } = require("./statisticsController");
 
 exports.home = (req, res) => {
   res.render("home", {
@@ -21,24 +22,12 @@ exports.themes = async (req, res) => {
   }
 };
 
-exports.manage_questions = async (req, res)=>{
-  try {
-    const themes = await Theme.findAll(); // récupère tous les thèmes
-    res.render("manage_questions", {
-      title: "Questions",
-      themes, // <-- tu envoies les thèmes à la vue
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Erreur serveur lors du chargement des thèmes");
-  }
-};
-
+//render the manage questions page
 exports.questions = async (req, res) => {
   try {
     const themes = await Theme.findAll();
     const questions = await Question.findAll();
-    console.log("questions : ",questions)
+
     res.render("manage_questions", { 
       title: "Questions",
       questions,
@@ -49,3 +38,20 @@ exports.questions = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
+
+//render the admin dashboard
+exports.getDashboardAdmin = async (req, res) => {
+  try {
+    const stats = await getDashdoardStats();
+    const userswithScores = await getUsersWithScoreInTheme();
+
+    res.render("dashboard_admin", {
+      title: "DashboardAdmin",
+      stats,
+      userswithScores
+    })
+  } catch (error) {
+    console.error("error occurred while loading the Admin dashboard :", error);
+    res.status(500).send("server error occurred while loading the Admin dashboard ");
+  }
+}

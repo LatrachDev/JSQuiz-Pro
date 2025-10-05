@@ -42,44 +42,48 @@ exports.avgScoreIntheme = async (req, res) => {
     res.status(200).json(result);
   } catch (error) {
     console.error("Error while calculating averages by theme", error);
-    res
-      .status(500)
-      .json({ message: "error while calculating averages" });
+    res.status(500).json({ message: "error while calculating averages" });
   }
 };
 
-//total users
-exports.totalUsers = async (req, res) => {
+//calcul des statistiques du dashboard admin
+exports.getDashdoardStats = async () => {
   try {
     const totalUsers = await User.count();
-    return res.json({ totalUsers });
-  } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "Error while counting total of users" });
-  }
-};
-
-//total questions
-exports.totalQuestions = async (req, res) => {
-  try {
     const totalQuestions = await Question.count();
-    return res.json({ totalQuestions });
+    const totalThemes = await Theme.count();
+
+    const avgScore = await QuizSession.findAll({
+      attributes: [[Sequelize.fn("AVG", Sequelize.col("score")), "avgScore"]],
+    });
+
+    const averageScore = parseFloat(avgScore[0].get("avgScore")) || 0;
+    return {
+      totalUsers,
+      totalQuestions,
+      totalThemes,
+      averageScore: averageScore.toFixed(2),
+    };
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "Error while counting total of questions " });
+    console.error("error occurred while generating statistics :", error);
+    throw new Error("Failed to generate dashboard statistics");
   }
 };
 
-//total theme
-exports.totalThemes = async (req, res) => {
-  try {
-    const totalThemes = await Theme.count();
-    return res.json({ totalThemes });
-  } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "Error while counting total of themes " });
+exports.getUsersWithScoreInTheme = async () => {
+  const users = await QuizSession.findAll({
+    include: [
+      { model: User, attributes: ["id", "username"] },
+      { model: Theme, attributes: ["id", "name"] },
+    ],
+    order: [["started_at", "DESC"]],
+    attributes: ["score", "started_at"],
+  });
+
+  return users.map(quiz => ({
+      username: quiz.User.username,
+      themeName: quiz.Theme.name,
+      score: quiz.score,
+      date: quiz.started_at,
+    }));
   }
-};
