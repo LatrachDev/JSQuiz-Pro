@@ -55,7 +55,12 @@ exports.login = async (req, res) => {
     req.session.user = { id: user.id, name: user.username, role: user.role };
 
     // res.json({ message: "Logged in successfully", user: req.session.user });
-    res.redirect('/themes');
+    // res.redirect('/themes');
+    if (user.role === 'admin') {
+      return res.redirect('/dashboard_admin');
+    } else {
+      return res.redirect('/themes');
+    }
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
   }

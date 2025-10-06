@@ -23,20 +23,31 @@ exports.create = async (req, res) => {
 
     const isMultiple = multiple === "true" || multiple === true;
 
-    await Question.create({
+    const newQuestion = await Question.create({
       theme_id,
       question_text: question_text,
-      options: JSON.stringify(formattedOptions),
+      options: formattedOptions,
       multiple: isMultiple,
     });
 
+    // res.status(201).json({
+    //   success: true,
+    //   message: "Question created successfully",
+    //   data: {
+    //     id: newQuestion.id,
+    //     question_text: newQuestion.question_text,
+    //     multiple: newQuestion.multiple,
+    //     theme_id: newQuestion.theme_id,
+    //     options: formattedOptions,
+    //   },
+    // });
 
     return res.redirect("/manage_questions");
   } catch (error) {
     console.error(error);
     res.status(500).send("Erreur lors de la création de la question.");
   }
-}
+};
 
 //find question by id
 exports.findOne = async (req, res) => {

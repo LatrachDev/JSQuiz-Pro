@@ -38,8 +38,8 @@ exports.quiz = async (req, res) => {
     });
   } catch (error) {
     console.error("Error getting user:", error);
-    res.status(500).send("Internal Server Error"); // ✅ Added this missing line
-  } // ✅ FIXED: this closing brace was missing — it ends the `exports.quiz` function properly
+    res.status(500).send("Internal Server Error");
+  } 
 };
 
 // render the manage questions page
