@@ -6,7 +6,7 @@ export async function initQuiz(themeId, userId) {
     let userAnswers = [];
 
     let timer;
-    let time = 20;
+    let time;
 
     const nextButton = document.getElementById("next-btn");
     const noteText = document.getElementById("note-text");
@@ -15,11 +15,9 @@ export async function initQuiz(themeId, userId) {
 
     // Initialize quiz
     await api.startSession(userId, themeId);
-    // get theme questions
     const data = await api.fetchQuestions(themeId);
     questions = data.questions || data;
     renderQuestion(currentIndex);
-
 
     function handleSelect(btn, multiple) {
         const value = btn.dataset.value;
@@ -45,7 +43,7 @@ export async function initQuiz(themeId, userId) {
     }
 
     function renderQuestion(index) {
-        startTimer();
+        stopTimer(); // ensure no overlapping timers
         userAnswers = [];
         const q = questions[index];
         if (!q) return document.location.href = `../result/${themeId}`;
@@ -70,6 +68,8 @@ export async function initQuiz(themeId, userId) {
 
         nextButton.textContent = index === questions.length - 1 ? "Finish" : "Next";
         optionsContainer.querySelectorAll("button").forEach(b => b.disabled = false);
+
+        startTimer(); // start after question is rendered
     }
 
     async function handleNext() {
@@ -77,6 +77,22 @@ export async function initQuiz(themeId, userId) {
         const currentQuestion = questions[currentIndex];
         if (!currentQuestion) return;
 
+        await saveAndShowResult(currentQuestion);
+
+        if (currentIndex === questions.length - 1) {
+            const scoreData = await api.calculateScore(userId, themeId);
+            if (scoreData.success) document.location.href = `../result/${themeId}`;
+            return;
+        }
+
+        setTimeout(() => {
+            currentIndex++;
+            renderQuestion(currentIndex);
+        }, 2000);
+    }
+
+    // Save + show correct/incorrect styling
+    async function saveAndShowResult(currentQuestion) {
         const correctData = await api.checkCorrect(currentQuestion.id, userAnswers);
         if (correctData.success) {
             optionsContainer.querySelectorAll("button").forEach(btn => {
@@ -92,41 +108,35 @@ export async function initQuiz(themeId, userId) {
         }
 
         await api.saveAnswer(userId, themeId, currentQuestion.id, userAnswers);
-
-        if (currentIndex === questions.length - 1) {
-            const scoreData = await api.calculateScore(userId, themeId);
-            if (scoreData.success) document.location.href = `../result/${themeId}`;
-            return;
-        }
-
-        setTimeout(() => {
-            currentIndex++;
-            renderQuestion(currentIndex);
-        }, 2000);
     }
 
-    // timer functions
     function updateTimerDisplay(seconds) {
         const timerEl = document.getElementById("timer");
         timerEl.textContent = `${String(seconds).padStart(2, '0')}s`;
     }
 
-    function startTimer() {
-        time = 20; // reset timer for each question
+    async function startTimer() {
+        time = 5; // reset timer for each question
         updateTimerDisplay(time);
 
-        timer = setInterval(() => {
+        const currentQuestion = questions[currentIndex]; // ✅ defined here
+
+        timer = setInterval(async () => {
             time--;
 
             if (time < 0) {
-                stopTimer(); // stop the current timer
-                const isLastQuestion = currentIndex === questions.length - 1;
-                if (isLastQuestion) {
-                    calculateFinalScore();
+                stopTimer();
+                // Save current answer (even if empty)
+                await api.saveAnswer(userId, themeId, currentQuestion.id, userAnswers);
+
+                if (currentIndex === questions.length - 1) {
+                    const scoreData = await api.calculateScore(userId, themeId);
+                    if (scoreData.success) {
+                        setTimeout(document.location.href = `../result/${themeId}`, 1000)
+                    };
                 } else {
                     currentIndex++;
                     renderQuestion(currentIndex);
-                    startTimer(); // restart for next question
                 }
             } else {
                 updateTimerDisplay(time);

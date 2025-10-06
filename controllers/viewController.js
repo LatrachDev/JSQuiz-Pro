@@ -1,5 +1,4 @@
 const { Theme, User, QuizSession, Question } = require("../models");
-const { Theme, Question } = require("../models");
 const { getDashdoardStats, getUsersWithScoreInTheme } = require("./statisticsController");
 
 exports.home = (req, res) => {
@@ -10,8 +9,8 @@ exports.home = (req, res) => {
 };
 
 // ========================== quiz views ==================================
+
 // themes page
-// themes
 exports.themes = async (req, res) => {
   try {
     const themes = await Theme.findAll();
@@ -39,7 +38,11 @@ exports.quiz = async (req, res) => {
     });
   } catch (error) {
     console.error("Error getting user:", error);
-//render the manage questions page
+    res.status(500).send("Internal Server Error"); // ✅ Added this missing line
+  } // ✅ FIXED: this closing brace was missing — it ends the `exports.quiz` function properly
+};
+
+// render the manage questions page
 exports.questions = async (req, res) => {
   try {
     const themes = await Theme.findAll();
@@ -81,7 +84,8 @@ exports.result = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
-//render the admin dashboard
+
+// render the admin dashboard
 exports.getDashboardAdmin = async (req, res) => {
   try {
     const stats = await getDashdoardStats();
@@ -91,9 +95,9 @@ exports.getDashboardAdmin = async (req, res) => {
       title: "DashboardAdmin",
       stats,
       userswithScores
-    })
+    });
   } catch (error) {
-    console.error("error occurred while loading the Admin dashboard :", error);
-    res.status(500).send("server error occurred while loading the Admin dashboard ");
+    console.error("error occurred while loading the Admin dashboard:", error);
+    res.status(500).send("server error occurred while loading the Admin dashboard");
   }
-}
+};
