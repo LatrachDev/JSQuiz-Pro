@@ -52,3 +52,16 @@ export async function getUserQuizAnswers(userId, themeId) {
         return null;
     }
 }
+
+export async function setUserBadge(userId) {
+    try {
+        const res = await fetch(`/api/quiz/user/${userId}/badge`, {
+            method: "GET",
+        });
+        if (!res.ok) throw new Error("Failed to set user badge");
+        return await res.json();
+    } catch (err) {
+        console.error("Error setting user badge:", err);
+        return { success: false, badge: "Beginner" };
+    }
+}

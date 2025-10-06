@@ -7,31 +7,38 @@
         <!-- Card 1 -->
 
         <% themes.forEach(theme=> { %>
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
+                <!-- Top colored bar -->
                 <div class="h-2 bg-yellow-400"></div>
-                <div class="p-8">
+
+                <!-- Card content -->
+                <div class="p-8 flex flex-col flex-grow">
                     <div class="flex justify-center mb-6">
                         <div class="w-20 h-20 bg-yellow-400 rounded-lg flex items-center justify-center">
                             <span class="text-2xl font-bold text-gray-800">JS</span>
                         </div>
                     </div>
+
                     <h2 class="text-xl font-bold text-center mb-6 capitalize">
                         <%= theme.name %>
                     </h2>
-                    <div class="space-y-3">
-                        <a href="/quiz/<%= theme.id%>"
+
+                    <!-- Buttons at the bottom -->
+                    <div class="mt-auto space-y-3">
+                        <a href="/quiz/<%= theme.id %>"
                             class="inline-block w-full text-center bg-gray-900 text-white py-3 px-4 rounded-lg font-medium hover:bg-gray-800 transition">
                             Start Quiz
                         </a>
 
-                        <!-- <button
-                            class="w-full bg-white text-gray-600 py-3 px-4 rounded-lg font-medium border-2 border-gray-300 hover:bg-gray-50 transition">
-                            See Results
-                        </button>
-                        <button
-                            class="w-full bg-white text-gray-600 py-3 px-4 rounded-lg font-medium border-2 border-gray-300 hover:bg-gray-50 transition">
-                            Resume Quiz
-                        </button> -->
+                        <!-- Uncomment if needed -->
+                        <!--
+        <button class="w-full bg-white text-gray-600 py-3 px-4 rounded-lg font-medium border-2 border-gray-300 hover:bg-gray-50 transition">
+          See Results
+        </button>
+        <button class="w-full bg-white text-gray-600 py-3 px-4 rounded-lg font-medium border-2 border-gray-300 hover:bg-gray-50 transition">
+          Resume Quiz
+        </button>
+        -->
                     </div>
                 </div>
             </div>

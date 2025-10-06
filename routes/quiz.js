@@ -14,5 +14,5 @@ router.post("/correct", quizController.correct);
 router.get("/user/:userId/theme/:themeId/history", quizController.getUserQuizAnswers);
 router.get("/user/:userId/theme/:themeId/score", quizSessionController.getUserScore);
 
-router.get("/user/:userId/badge", badgeController.getUserBadge);
+router.get("/user/:userId/badge", badgeController.setUserBadge);
 module.exports = router;

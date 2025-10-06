@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const expressLayouts = require("express-ejs-layouts");
 const session = require("express-session");
+const setUser = require("./middlewares/setUser");
 
 const sequelize = require("./config/database");
 const Theme = require("./models/Theme");
@@ -19,6 +20,10 @@ app.use(
     saveUninitialized: false,
   })
 );
+
+// Set user for EJS templates (this must come after session)
+app.use(setUser);
+
 
 // DB connection
 (async () => {
@@ -58,7 +63,7 @@ app.use("/auth", authRoutes);
 //     res.send('Express + Sequelize + MySQL is running!');
 // });
 
-const themes = ["javaScript", "nodejs", "nestjs", "reactjs", "nextjs"];
+const themes = ["JavaScript Basics","JavaScript Functions & Scope","JavaScript Advanced (Async, DOM, etc)'"];
 
 (async () => {
   for (const name of themes) {

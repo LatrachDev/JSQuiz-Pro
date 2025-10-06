@@ -1,6 +1,6 @@
 const { QuizSession, Question, Theme } = require("../models");
 
-exports.getUserBadge = async (req, res) => {
+exports.setUserBadge = async (req, res) => {
     try {
         const { userId } = req.params;
 
