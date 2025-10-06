@@ -84,6 +84,6 @@ exports.getUsersWithScoreInTheme = async () => {
       username: quiz.User.username,
       themeName: quiz.Theme.name,
       score: quiz.score,
-      date: quiz.started_at,
+      date: new Date(quiz.started_at).toDateString(),
     }));
   }

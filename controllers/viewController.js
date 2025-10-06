@@ -1,5 +1,5 @@
 const { Theme, User, QuizSession, Question } = require("../models");
-const { Theme, Question } = require("../models");
+// const { Theme, Question } = require("../models");
 const { getDashdoardStats, getUsersWithScoreInTheme } = require("./statisticsController");
 
 exports.home = (req, res) => {
@@ -39,6 +39,8 @@ exports.quiz = async (req, res) => {
     });
   } catch (error) {
     console.error("Error getting user:", error);
+  }
+}
 //render the manage questions page
 exports.questions = async (req, res) => {
   try {
