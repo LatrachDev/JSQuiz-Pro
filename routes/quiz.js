@@ -3,6 +3,8 @@ const express = require("express");
 const router = express.Router();
 const quizController = require("../controllers/quizController");
 const quizSessionController = require("../controllers/quizSessionController");
+const badgeController = require("../controllers/badgeController");
+
 
 router.get("/theme/:themeId/questions", quizController.getQuestionsByTheme);
 router.post("/start", quizSessionController.startSession);
@@ -12,4 +14,5 @@ router.post("/correct", quizController.correct);
 router.get("/user/:userId/theme/:themeId/history", quizController.getUserQuizAnswers);
 router.get("/user/:userId/theme/:themeId/score", quizSessionController.getUserScore);
 
+router.get("/user/:userId/badge", badgeController.getUserBadge);
 module.exports = router;
