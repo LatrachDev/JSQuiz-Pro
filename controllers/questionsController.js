@@ -9,38 +9,26 @@ exports.create = async (req, res) => {
       return res.status(400).send("Champs requis manquants.");
     }
 
-    const opts = Array.isArray(options) ? options : [options];
-    const correctIndexes = Array.isArray(correct)
-      ? correct.map(Number)
-      : correct !== undefined
-      ? [Number(correct)]
-      : [];
+    // const opts = Array.isArray(options) ? options : [options];
+    // const correctIndexes = Array.isArray(correct)
+    //   ? correct.map(Number)
+    //   : correct !== undefined
+    //   ? [Number(correct)]
+    //   : [];
 
-    const formattedOptions = opts.map((opt, idx) => ({
-      text: opt,
-      correct: correctIndexes.includes(idx),
-    }));
+    // const formattedOptions = opts.map((opt, idx) => ({
+    //   text: opt,
+    //   correct: correctIndexes.includes(idx),
+    // }));
 
     const isMultiple = multiple === "true" || multiple === true;
 
     const newQuestion = await Question.create({
       theme_id,
       question_text: question_text,
-      options: formattedOptions,
+      options: options,
       multiple: isMultiple,
     });
-
-    // res.status(201).json({
-    //   success: true,
-    //   message: "Question created successfully",
-    //   data: {
-    //     id: newQuestion.id,
-    //     question_text: newQuestion.question_text,
-    //     multiple: newQuestion.multiple,
-    //     theme_id: newQuestion.theme_id,
-    //     options: formattedOptions,
-    //   },
-    // });
 
     return res.redirect("/manage_questions");
   } catch (error) {
