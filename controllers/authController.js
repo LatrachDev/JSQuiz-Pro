@@ -52,15 +52,10 @@ exports.login = async (req, res) => {
     if (!validPassword) return res.status(400).json({ message: "Invalid credentials" });
 
     // save session
-    req.session.user = { id: user.id, name: user.username, role: user.role };
+    req.session.user = { id: user.id, username: user.username, role: user.role };
 
-    // res.json({ message: "Logged in successfully", user: req.session.user });
-    // res.redirect('/themes');
-    if (user.role === 'admin') {
-      return res.redirect('/dashboard_admin');
-    } else {
-      return res.redirect('/themes');
-    }
+    // Redirect to dashboard after successful login
+    res.redirect('/dashboard');
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
   }
@@ -71,6 +66,7 @@ exports.logout = (req, res) => {
   req.session.destroy((err) => {
     if (err) return res.status(500).json({ message: "Logout error" });
     res.clearCookie("connect.sid");
-    res.json({ message: "Logged out successfully" });
+    // res.json({ message: "Logged out successfully" });
+     res.redirect('/dashboard');
   });
 };

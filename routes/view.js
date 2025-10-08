@@ -10,4 +10,9 @@ router.get('/result/:themeId', isAuthenticated, viewController.result);
 router.get("/manage_questions", isAdmin, isAuthenticated,viewController.questions);
 router.get("/dashboard_admin", isAdmin, isAuthenticated, viewController.getDashboardAdmin);
 
+
+// Protected routes
+router.get('/dashboard', isAuthenticated, viewController.userDashboard);
+// router.get('/themes', isAuthenticated, viewController.themes);
+
 module.exports = router;
