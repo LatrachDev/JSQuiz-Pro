@@ -30,7 +30,11 @@ exports.create = async (req, res) => {
       multiple: isMultiple,
     });
 
-    return res.redirect("/manage_questions");
+    // return res.redirect("/manage_questions");
+    res.status(201).json({
+      message: "Question créée avec succès",
+      data: newQuestion,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).send("Erreur lors de la création de la question.");

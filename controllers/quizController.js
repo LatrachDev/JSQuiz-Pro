@@ -9,7 +9,7 @@ exports.getQuestionsByTheme = async (req, res) => {
 
         const questions = await Question.findAll({
             where: { theme_id: themeId },
-            attributes: ["id", "question_text", "options", "multiple"],
+            attributes: ["id", "question_text", "options", "multiple","theme_id"],
             order: [[Sequelize.literal('RAND()')]] // shuffle
         });
 
