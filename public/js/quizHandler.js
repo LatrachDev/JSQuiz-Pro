@@ -60,7 +60,7 @@ export async function initQuiz(themeId, userId) {
         q.options.forEach(opt => {
             const btn = document.createElement("button");
             btn.dataset.value = opt.text;
-            btn.className = "option w-full text-left p-3 md:p-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all duration-150";
+            btn.className = "option w-full text-left p-3 md:p-4 bg-gray-100 rounded-lg transition-all duration-150";
             btn.textContent = opt.text;
             btn.addEventListener("click", () => handleSelect(btn, q.multiple));
             optionsContainer.appendChild(btn);
@@ -80,7 +80,7 @@ export async function initQuiz(themeId, userId) {
         await saveAndShowResult(currentQuestion);
 
         if (currentIndex === questions.length - 1) {
-            const scoreData = await api.calculateScore(userId, themeId);
+            const scoreData = await api.calculateScore(userId, themeId);            
             if (scoreData.success) document.location.href = `../result/${themeId}`;
             return;
         }
@@ -116,7 +116,7 @@ export async function initQuiz(themeId, userId) {
     }
 
     async function startTimer() {
-        time = 20; // reset timer for each question
+        time = 5; // reset timer for each question
         updateTimerDisplay(time);
 
         const currentQuestion = questions[currentIndex]; // ✅ defined here
