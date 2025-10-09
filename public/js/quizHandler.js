@@ -88,7 +88,7 @@ export async function initQuiz(themeId, userId) {
         setTimeout(() => {
             currentIndex++;
             renderQuestion(currentIndex);
-        }, 2000);
+        }, 1000);
     }
 
     // Save + show correct/incorrect styling
