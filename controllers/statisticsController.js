@@ -73,17 +73,25 @@ exports.getDashdoardStats = async () => {
 exports.getUsersWithScoreInTheme = async () => {
   const users = await QuizSession.findAll({
     include: [
-      { model: User, attributes: ["id", "username"] },
-      { model: Theme, attributes: ["id", "name"] },
+      {
+        model: User,
+        attributes: ["id", "username", "role"],
+        where: { role: { [Sequelize.Op.ne]: 'admin' } }
+      },
+      {
+        model: Theme,
+        attributes: ["id", "name"]
+      },
     ],
     order: [["started_at", "DESC"]],
     attributes: ["score", "started_at"],
   });
 
   return users.map(quiz => ({
-      username: quiz.User.username,
-      themeName: quiz.Theme.name,
-      score: quiz.score,
-      date: new Date(quiz.started_at).toDateString(),
-    }));
-  }
+    username: quiz.User.username,
+    themeName: quiz.Theme.name,
+    themeId: quiz.Theme.id,
+    score: quiz.score,
+    date: new Date(quiz.started_at).toDateString(),
+  }));
+}

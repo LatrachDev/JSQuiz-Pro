@@ -4,13 +4,13 @@ export async function initQuiz(themeId, userId) {
     let questions = [];
     let currentIndex = 0;
     let userAnswers = [];
+
     let timer;
     let time;
 
     const nextButton = document.getElementById("next-btn");
     const noteText = document.getElementById("note-text");
     const optionsContainer = document.getElementById("options-container");
-
     nextButton.addEventListener("click", handleNext);
 
     // Initialize quiz
@@ -19,46 +19,44 @@ export async function initQuiz(themeId, userId) {
     questions = data.questions || data;
     renderQuestion(currentIndex);
 
-    // ==================== Helper Functions ====================
-
     function handleSelect(btn, multiple) {
         const value = btn.dataset.value;
-
         if (multiple) {
             if (userAnswers.includes(value)) {
                 userAnswers = userAnswers.filter(a => a !== value);
-                btn.classList.replace("bg-yellow-500", "bg-gray-100");
-                btn.classList.replace("text-white", "text-gray-800");
+                btn.classList.remove("bg-yellow-500", "text-white");
+                btn.classList.add("bg-gray-100", "hover:bg-gray-200");
             } else {
                 userAnswers.push(value);
-                btn.classList.replace("bg-gray-100", "bg-yellow-500");
-                btn.classList.add("text-white", "border-yellow-600");
+                btn.classList.add("bg-yellow-500", "text-white", "border-yellow-600");
+                btn.classList.remove("bg-gray-100", "hover:bg-gray-200");
             }
         } else {
             userAnswers = [value];
             optionsContainer.querySelectorAll("button").forEach(b => {
-                b.classList.replace("bg-yellow-500", "bg-gray-100");
-                b.classList.replace("text-white", "text-gray-800");
+                b.classList.remove("bg-yellow-500", "text-white");
+                b.classList.add("bg-gray-100", "hover:bg-gray-200");
             });
-            btn.classList.replace("bg-gray-100", "bg-yellow-500");
-            btn.classList.add("text-white");
+            btn.classList.add("bg-yellow-500", "text-white");
+            btn.classList.remove("bg-gray-100", "hover:bg-gray-200");
         }
     }
 
     function renderQuestion(index) {
-        stopTimer();
+        stopTimer(); // ensure no overlapping timers
         userAnswers = [];
-
         const q = questions[index];
-        if (!q) return endQuiz();
+        if (!q) return document.location.href = `../result/${themeId}`;
 
         document.getElementById("question-number").textContent = `Question: ${index + 1}/${questions.length}`;
         document.getElementById("progress-bar").style.width = `${((index + 1) / questions.length) * 100}%`;
         document.getElementById("question-text").textContent = q.question_text;
+
         noteText.innerHTML = `<span class="text-yellow-500 font-semibold">Note :</span>
             This question ${q.multiple ? "may have multiple answers" : "has only one correct answer"}.`;
 
         optionsContainer.innerHTML = "";
+
         q.options.forEach(opt => {
             const btn = document.createElement("button");
             btn.dataset.value = opt.text;
@@ -71,71 +69,77 @@ export async function initQuiz(themeId, userId) {
         nextButton.textContent = index === questions.length - 1 ? "Finish" : "Next";
         optionsContainer.querySelectorAll("button").forEach(b => b.disabled = false);
 
-        startTimer();
+        startTimer(); // start after question is rendered
     }
 
     async function handleNext() {
         stopTimer();
-        await saveAndShowResult(questions[currentIndex]);
+        const currentQuestion = questions[currentIndex];
+        if (!currentQuestion) return;
+
+        await saveAndShowResult(currentQuestion);
 
         if (currentIndex === questions.length - 1) {
-            await endQuiz();
-        } else {
+            const scoreData = await api.calculateScore(userId, themeId);
+            if (scoreData.success) document.location.href = `../result/${themeId}`;
+            return;
+        }
+
+        setTimeout(() => {
             currentIndex++;
             renderQuestion(currentIndex);
-        }
+        }, 2000);
     }
 
+    // Save + show correct/incorrect styling
     async function saveAndShowResult(currentQuestion) {
         const correctData = await api.checkCorrect(currentQuestion.id, userAnswers);
-        optionsContainer.querySelectorAll("button").forEach(btn => {
-            const text = btn.textContent.trim();
-            if (correctData.success) {
+        if (correctData.success) {
+            optionsContainer.querySelectorAll("button").forEach(btn => {
+                const text = btn.textContent.trim();
                 if (correctData.correctAnswers.includes(text)) {
-                    btn.classList.replace("bg-yellow-500", "bg-[#24b82a]");
-                    btn.classList.add("text-white");
+                    btn.classList.remove("bg-yellow-500");
+                    btn.classList.add("bg-[#24b82a]", "text-white");
                 } else if (userAnswers.includes(text)) {
                     btn.classList.add("bg-red-500", "text-white");
                 }
-            }
-            btn.disabled = true;
-        });
+                btn.disabled = true;
+            });
+        }
 
         await api.saveAnswer(userId, themeId, currentQuestion.id, userAnswers);
     }
 
-    async function endQuiz() {
-        await api.setUserBadge(userId);
-        const scoreData = await api.calculateScore(userId, themeId);
-        if (scoreData.success) document.location.href = `../result/${themeId}`;
-    }
-
     function updateTimerDisplay(seconds) {
-        document.getElementById("timer").textContent = `${String(seconds).padStart(2, '0')}s`;
+        const timerEl = document.getElementById("timer");
+        timerEl.textContent = `${String(seconds).padStart(2, '0')}s`;
     }
 
-    function startTimer() {
-        stopTimer();
-        time = 20;
+    async function startTimer() {
+        time = 20; // reset timer for each question
         updateTimerDisplay(time);
 
-        const currentQuestion = questions[currentIndex];
+        const currentQuestion = questions[currentIndex]; // ✅ defined here
 
         timer = setInterval(async () => {
             time--;
-            updateTimerDisplay(time);
 
             if (time < 0) {
                 stopTimer();
-                // Save even if empty
+                // Save current answer (even if empty)
                 await api.saveAnswer(userId, themeId, currentQuestion.id, userAnswers);
 
                 if (currentIndex === questions.length - 1) {
-                    await endQuiz();
+                    const scoreData = await api.calculateScore(userId, themeId);
+                    if (scoreData.success) {
+                        setTimeout(document.location.href = `../result/${themeId}`, 1000)
+                    };
                 } else {
                     currentIndex++;
                     renderQuestion(currentIndex);
                 }
+            } else {
+                updateTimerDisplay(time);
             }
         }, 1000);
     }

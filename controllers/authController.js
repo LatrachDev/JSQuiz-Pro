@@ -3,8 +3,8 @@ const { User } = require("../models");
 
 // signup
 exports.register = async (req, res) => {
-    console.log("requessst hahia", req.body);
-    
+  console.log("requessst hahia", req.body);
+
   const { username, password } = req.body;
   console.log(req.body);
 
@@ -26,7 +26,7 @@ exports.register = async (req, res) => {
     });
 
     console.log("User registered successfully");
-    
+
 
     // res.status(201).json({ message: "User registered successfully" });
     res.redirect('/auth/login');
@@ -55,7 +55,11 @@ exports.login = async (req, res) => {
     req.session.user = { id: user.id, username: user.username, role: user.role };
 
     // Redirect to dashboard after successful login
-    res.redirect('/dashboard');
+    if (user.role === 'admin') {
+      return res.redirect('/dashboard_admin');
+    } else {
+      return res.redirect('/dashboard');
+    }
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
   }
@@ -67,6 +71,6 @@ exports.logout = (req, res) => {
     if (err) return res.status(500).json({ message: "Logout error" });
     res.clearCookie("connect.sid");
     // res.json({ message: "Logged out successfully" });
-     res.redirect('/dashboard');
+    res.redirect('/dashboard');
   });
 };

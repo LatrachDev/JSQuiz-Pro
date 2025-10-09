@@ -261,7 +261,6 @@
     // On reconstruit la sidebar dynamiquement
     if (questions.length > 0) {
       questionsContainer.innerHTML = `
-        <h2 class="text-lg sm:text-xl font-semibold mb-4">Questions</h2>
         ${questions.map(q => `
           <div class="border rounded-lg p-3 mb-3 question-item cursor-pointer" data-question='${JSON.stringify(q)}'>
             <p class="text-sm mb-2">${q.question_text}</p>
