@@ -1,5 +1,5 @@
-const sequelize = require('../config/database');
-const Theme = require('../models/Theme');
+const sequelize = require('./config/database.js');
+const Theme = require('./models/Theme.js');
 
 const themes = [
   { name: 'javaScript' },
