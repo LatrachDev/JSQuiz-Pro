@@ -1,4 +1,4 @@
-const { QuizSession, Question, Theme } = require("../models");
+const { QuizSession, Question, Theme, UserBadge } = require("../models");
 
 exports.setUserBadge = async (req, res) => {
     try {
@@ -26,7 +26,15 @@ exports.setUserBadge = async (req, res) => {
         else if (userScore < (3 * maxScore) / 4) badge = "Intermediate";
         else badge = "Expert";
 
+        // create or update badge
+        await UserBadge.upsert({
+            user_id: userId,
+            badge_name: badge,
+            awarded_at: new Date()
+        });
+
         res.json({ badge, userScore, maxScore });
+
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: "Internal server error" });

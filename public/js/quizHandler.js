@@ -80,8 +80,11 @@ export async function initQuiz(themeId, userId) {
         await saveAndShowResult(currentQuestion);
 
         if (currentIndex === questions.length - 1) {
-            const scoreData = await api.calculateScore(userId, themeId);            
-            if (scoreData.success) document.location.href = `../result/${themeId}`;
+            const scoreData = await api.calculateScore(userId, themeId);
+            if (scoreData.success) {
+                document.location.href = `../result/${themeId}`;
+                await api.setUserBadge(userId);
+            };
             return;
         }
 
@@ -116,10 +119,10 @@ export async function initQuiz(themeId, userId) {
     }
 
     async function startTimer() {
-        time = 5; // reset timer for each question
+        time = 20; // reset timer for each question
         updateTimerDisplay(time);
 
-        const currentQuestion = questions[currentIndex]; // ✅ defined here
+        const currentQuestion = questions[currentIndex]; // defined here
 
         timer = setInterval(async () => {
             time--;
@@ -132,6 +135,7 @@ export async function initQuiz(themeId, userId) {
                 if (currentIndex === questions.length - 1) {
                     const scoreData = await api.calculateScore(userId, themeId);
                     if (scoreData.success) {
+                        await api.setUserBadge(userId);
                         setTimeout(document.location.href = `../result/${themeId}`, 1000)
                     };
                 } else {

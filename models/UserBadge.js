@@ -9,7 +9,8 @@ const UserBadge = sequelize.define('UserBadge', {
   },
   user_id: { 
     type: DataTypes.INTEGER, 
-    allowNull: false 
+    allowNull: false,
+    unique: true
   },
   badge_name: { 
     type: DataTypes.ENUM('Beginner', 'Intermediate', 'Expert'),

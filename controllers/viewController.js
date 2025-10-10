@@ -33,7 +33,7 @@ exports.quiz = async (req, res) => {
     const user = req.session.user;
     res.render("quiz", {
       title: "Themes",
-      user,
+      // user,
       theme
     });
   } catch (error) {
@@ -74,7 +74,7 @@ exports.result = async (req, res) => {
 
     res.render("result", {
       title: "Themes",
-      user,
+      // user,
       theme,
       score,
       totalQuestions
@@ -162,7 +162,7 @@ exports.userDashboard = async (req, res) => {
     // res.render("dashboard_user");
     console.log(req.user);
     res.render("dashboard_user", {
-      user: req.user
+      // user: req.user
       
       // themes: themesWithScores,
       // topPlayers: topPlayers.map(player => ({

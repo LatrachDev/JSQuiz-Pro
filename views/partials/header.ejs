@@ -16,7 +16,7 @@
       const badgeClass = badgeColors[user.badge] || 'bg-gray-100 text-gray-800';
     %>
       <span class="px-2 py-1 text-sm rounded-full <%= badgeClass %>">
-        <%= user.badge %>
+        <%= user.badge  %>
       </span>
     <% } %>
   </div>
@@ -41,3 +41,9 @@
     <div></div> <!-- empty placeholder to keep layout aligned -->
   <% } %>
 </header>
+
+
+<script>
+  console.log(<%= JSON.stringify(user) %>);
+  
+</script>
